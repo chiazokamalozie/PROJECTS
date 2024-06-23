@@ -172,13 +172,18 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
 
-            // Highlight search terms
-            $('section').unmark().mark(value);
+            // Unmark previous highlights
+            $('section').unmark();
+
+            // Highlight new search term if not empty
+            if (value) {
+                $('section').mark(value);
+            }
         });
     });
 
-    // jQuery mark plugin
-    !function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){"use strict";function t(t){if("string"==typeof t)return t=t.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&"),new RegExp(t,"gmi");if("number"==typeof t)return new RegExp(t+"","gmi");if(t instanceof RegExp)return t;throw new Error("Invalid parameter passed to the mark function. Expected a string, number, or RegExp.")}e.fn.mark=function(a){return this.each(function(){var n,r,i=e(this);i.html(i.html().replace(t(a),function(e){return n=e,i=n,"<mark>"+n+"</mark>"}))})},e.fn.unmark=function(){return this.each(function(){e(this).find("mark").each(function(){var t=e(this);t.replaceWith(t.html())})})}});
+    // jQuery plugin for marking text
+    !function(e){"use strict";e.fn.mark=function(n){return this.each(function(){var t,o=e(this),a=n instanceof RegExp?n:new RegExp(n.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&"),"gi");o.html(o.html().replace(a,function(e){return t=e,"<mark>"+t+"</mark>"}))})},e.fn.unmark=function(){return this.each(function(){e(this).find("mark").each(function(){var n=e(this);n.replaceWith(n.html())})})}}(jQuery);
 </script>
 </body>
 </html>
