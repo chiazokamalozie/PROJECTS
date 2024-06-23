@@ -69,10 +69,6 @@
             border-radius: 10px;
             padding: 20px;
         }
-        mark {
-            background-color: yellow;
-            color: black;
-        }
     </style>
 </head>
 <body>
@@ -89,9 +85,6 @@
             <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
             <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
         </ul>
-        <form class="form-inline my-2 my-lg-0 ml-auto">
-            <input id="search-bar" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        </form>
     </div>
 </nav>
 
@@ -159,40 +152,13 @@
     </section>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function(){
         $('section').addClass('animate__animated animate__fadeIn');
-
-        // Store original HTML content of each section
-        $('section').each(function() {
-            $(this).data('originalHTML', $(this).html());
-        });
-
-        $('#search-bar').on('keyup', function() {
-            var value = $(this).val().toLowerCase();
-
-            // Filter sections based on search input
-            $('section').filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-            });
-
-            // Clear previous highlights
-            $('section').each(function() {
-                $(this).html($(this).data('originalHTML'));
-            });
-
-            // Highlight new search term if not empty
-            if (value) {
-                $('section:visible').mark(value);
-            }
-        });
     });
-
-    // jQuery plugin for marking text
-    !function(e){"use strict";e.fn.mark=function(n){return this.each(function(){var t,o=e(this),a=n instanceof RegExp?n:new RegExp(n.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&"),"gi");o.html(o.html().replace(a,function(e){return t=e,"<mark>"+t+"</mark>"}))})},e.fn.unmark=function(){return this.each(function(){e(this).find("mark").each(function(){var n=e(this);n.replaceWith(n.html())})})}}(jQuery);
 </script>
 </body>
 </html>
