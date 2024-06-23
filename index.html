@@ -69,6 +69,10 @@
             border-radius: 10px;
             padding: 20px;
         }
+        mark {
+            background-color: yellow;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -165,10 +169,16 @@
         $('#search-bar').on('keyup', function() {
             var value = $(this).val().toLowerCase();
             $('section').filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
+
+            // Highlight search terms
+            $('section').unmark().mark(value);
         });
     });
+
+    // jQuery mark plugin
+    !function(e){"function"==typeof define&&define.amd?define(["jquery"],e):"object"==typeof exports?module.exports=e(require("jquery")):e(jQuery)}(function(e){"use strict";function t(t){if("string"==typeof t)return t=t.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&"),new RegExp(t,"gmi");if("number"==typeof t)return new RegExp(t+"","gmi");if(t instanceof RegExp)return t;throw new Error("Invalid parameter passed to the mark function. Expected a string, number, or RegExp.")}e.fn.mark=function(a){return this.each(function(){var n,r,i=e(this);i.html(i.html().replace(t(a),function(e){return n=e,i=n,"<mark>"+n+"</mark>"}))})},e.fn.unmark=function(){return this.each(function(){e(this).find("mark").each(function(){var t=e(this);t.replaceWith(t.html())})})}});
 </script>
 </body>
 </html>
