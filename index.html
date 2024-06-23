@@ -6,7 +6,6 @@
     <title>Portfolio</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
     <style>
         body {
             scroll-behavior: smooth;
@@ -167,25 +166,33 @@
     $(document).ready(function(){
         $('section').addClass('animate__animated animate__fadeIn');
 
-        var sections = $('section');
+        // Store original HTML content of each section
+        $('section').each(function() {
+            $(this).data('originalHTML', $(this).html());
+        });
 
         $('#search-bar').on('keyup', function() {
             var value = $(this).val().toLowerCase();
 
-            // Show all sections if the search bar is empty
-            if (!value) {
-                sections.show();
-                sections.unmark();
-                return;
+            // Filter sections based on search input
+            $('section').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+
+            // Clear previous highlights
+            $('section').each(function() {
+                $(this).html($(this).data('originalHTML'));
+            });
+
+            // Highlight new search term if not empty
+            if (value) {
+                $('section:visible').mark(value);
             }
-
-            sections.hide().filter(function() {
-                return $(this).text().toLowerCase().indexOf(value) > -1;
-            }).show();
-
-            sections.unmark().mark(value);
         });
     });
+
+    // jQuery plugin for marking text
+    !function(e){"use strict";e.fn.mark=function(n){return this.each(function(){var t,o=e(this),a=n instanceof RegExp?n:new RegExp(n.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g,"\\$&"),"gi");o.html(o.html().replace(a,function(e){return t=e,"<mark>"+t+"</mark>"}))})},e.fn.unmark=function(){return this.each(function(){e(this).find("mark").each(function(){var n=e(this);n.replaceWith(n.html())})})}}(jQuery);
 </script>
 </body>
 </html>
