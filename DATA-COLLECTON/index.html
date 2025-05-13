@@ -1,1 +1,477 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customs Data Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin: 0 10px;
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            margin-top: 40px;
+        }
+        .data-summary {
+            background: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            transition: width 0.3s ease;
+            width: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .chart-container {
+            width: 100%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        .view-more {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 80%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .sort-button {
+            cursor: pointer;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        .sort-button:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Customs Data Collection</h1>
+    <nav>
+        <a href="#data-summary">Data Summary</a>
+        <a href="#visualization">Visualization</a>
+    </nav>
+    <form id="data-form">
+        <label for="importExportVolumeFile">DOCUMENT A</label>
+        <input type="file" id="importExportVolumeFile" name="importExportVolumeFile" accept=".csv" required><br>
+        <label for="transportationDetailsFile">DOCUMENT B</label>
+        <input type="file" id="transportationDetailsFile" name="transportationDetailsFile" accept=".csv" required><br>
+        <button type="submit">Submit</button>
+    </form>
 
+    <h2 id="data-summary">Data Summary</h2>
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="Search...">
+    </div>
+    <div id="dataSummary" class="data-summary"></div>
+
+    <h2 id="visualization">Visualization</h2>
+    <div class="chart-container">
+        <label for="chartType">Choose Chart Type:</label>
+        <select id="chartType">
+            <option value="bar">Bar Chart</option>
+            <option value="line">Line Chart</option>
+            <option value="pie">Pie Chart</option>
+            <option value="doughnut">Doughnut Chart</option>
+            <option value="radar">Radar Chart</option>
+            <option value="polarArea">Polar Area Chart</option>
+            <option value="drawTime">DrawTime</option>
+
+        </select>
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+        
+        document.getElementById('data-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            const importExportVolumeFile = document.getElementById('importExportVolumeFile').files[0];
+            const transportationDetailsFile = document.getElementById('transportationDetailsFile').files[0];
+    
+            if (importExportVolumeFile && transportationDetailsFile) {
+                readFile(importExportVolumeFile, function(importData) {
+                    const importExportVolumeData = processCSVData(importData, 'Import/Export Volume Data');
+                    readFile(transportationDetailsFile, function(transportData) {
+                        const transportationDetailsData = processCSVData(transportData, 'Transportation Details Data');
+                        displayDataSummary(importExportVolumeData, transportationDetailsData);
+                        generateAnalysisAndVisualization(importExportVolumeData, transportationDetailsData);
+                    });
+                });
+            }
+        });
+    
+        document.getElementById('search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            filterTable(query);
+        });
+    
+        document.getElementById('chartType').addEventListener('change', function() {
+            updateChart();
+        });
+    
+        function readFile(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const fileContent = event.target.result;
+                callback(fileContent);
+            };
+            reader.readAsText(file);
+        }
+    
+        function processCSVData(data, title) {
+            const rows = data.split('\n').filter(row => row.trim() !== '');
+            const tableData = rows.map(row => row.split(',').map(cell => cell.trim()));
+            return { title, tableData };
+        }
+    
+        function displayDataSummary(importData, transportData) {
+            const summaryElement = document.getElementById('dataSummary');
+            summaryElement.innerHTML = '';
+    
+            const importTable = createTable(importData);
+            const transportTable = createTable(transportData);
+    
+            summaryElement.appendChild(importTable);
+            summaryElement.appendChild(transportTable);
+        }
+    
+        function createTable(data) {
+            const MAX_INITIAL_ROWS_DISPLAY = 5;
+            const ROWS_PER_SECTION = 5;
+    
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+    
+            const headerRow = document.createElement('tr');
+            data.tableData[0].forEach((header, index) => {
+                const th = document.createElement('th');
+                th.textContent = header;
+    
+                const sortSelect = document.createElement('select');
+                sortSelect.className = 'sort-select';
+                const options = ['Alphabetical', 'Numerical', 'Date/Time'];
+                options.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option.toLowerCase();
+                    opt.textContent = option;
+                    sortSelect.appendChild(opt);
+                });
+    
+                sortSelect.addEventListener('change', function() {
+                    sortTableByColumn(table, index, this.value);
+                });
+    
+                th.appendChild(sortSelect);
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+    
+            function addRows(start, end) {
+                data.tableData.slice(start, end).forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            }
+    
+            function removeRows(start) {
+                while (tbody.rows.length > start) {
+                    tbody.removeChild(tbody.lastChild);
+                }
+            }
+    
+            let isExpanded = false;
+    
+            function showMoreRows() {
+                const numRows = data.tableData.length;
+                const displayedRows = tbody.querySelectorAll('tr').length;
+    
+                addRows(displayedRows, Math.min(numRows, displayedRows + ROWS_PER_SECTION));
+                if (numRows <= displayedRows + ROWS_PER_SECTION) {
+                    viewMoreButton.disabled = true;
+                }
+                viewLessButton.disabled = false;
+            }
+    
+            function showLessRows() {
+                removeRows(MAX_INITIAL_ROWS_DISPLAY);
+                viewMoreButton.disabled = false;
+                viewLessButton.disabled = true;
+            }
+    
+            const viewMoreButton = document.createElement('button');
+            viewMoreButton.className = 'sort-button';
+            viewMoreButton.textContent = 'View More';
+            viewMoreButton.addEventListener('click', showMoreRows);
+    
+            const viewLessButton = document.createElement('button');
+            viewLessButton.className = 'sort-button';
+            viewLessButton.textContent = 'View Less';
+            viewLessButton.addEventListener('click', showLessRows);
+            viewLessButton.disabled = true; // Initially disabled
+    
+            addRows(0, MAX_INITIAL_ROWS_DISPLAY);
+    
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+            buttonContainer.appendChild(viewMoreButton);
+            buttonContainer.appendChild(viewLessButton);
+    
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            table.appendChild(buttonContainer);
+    
+            return table;
+        }
+    
+        function filterTable(query) {
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const rowText = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+                    row.style.display = rowText.includes(query) ? '' : 'none';
+                });
+            });
+        }
+    
+        function sortTableByColumn(table, columnIndex, type) {
+            const tbody = table.querySelector('tbody');
+            const rowsArray = Array.from(tbody.querySelectorAll('tr'));
+            rowsArray.sort((a, b) => {
+                const cellA = a.children[columnIndex].textContent;
+                const cellB = b.children[columnIndex].textContent;
+    
+                if (type === 'alphabetical') {
+                    return cellA.localeCompare(cellB);
+                } else if (type === 'numerical') {
+                    return parseFloat(cellA) - parseFloat(cellB);
+                } else if (type === 'date/time') {
+                    return new Date(cellA) - new Date(cellB);
+                } else {
+                    return 0;
+                }
+            });
+    
+            rowsArray.forEach(row => tbody.appendChild(row));
+        }
+    
+        function generateAnalysisAndVisualization(importData, transportData) {
+            const analysisElement = document.getElementById('dataSummary');
+            const analysisSection = document.createElement('div');
+            analysisSection.innerHTML = '<h2>Data Analysis</h2>';
+    
+            const importVolume = calculateVolume(importData.tableData);
+            const exportVolume = calculateVolume(transportData.tableData);
+    
+            const totalVolume = importVolume + exportVolume;
+            const averageVolume = totalVolume / 2;
+            const importExportRatio = (importVolume / exportVolume).toFixed(2);
+    
+            const peakImportMonth = identifyPeakMonth(importData.tableData);
+            const peakExportMonth = identifyPeakMonth(transportData.tableData);
+    
+            const analysisDetails = `
+                <p>Total Import Volume: ${importVolume}</p>
+                <p>Total Export Volume: ${exportVolume}</p>
+                <p>Average Volume: ${averageVolume}</p>
+                <p>Import to Export Ratio: ${importExportRatio}</p>
+                <p>Peak Import Month: ${peakImportMonth}</p>
+                <p>Peak Export Month: ${peakExportMonth}</p>
+                <p>Suggestions based on the analysis:</p>
+                <ul>
+                    <li>Optimize transportation routes to reduce costs.</li>
+                    <li>Investigate import/export trends to forecast future demands.</li>
+                    <li>Balance import and export volumes to maintain a healthy trade ratio.</li>
+                    <li>Focus on peak months to ensure supply chain efficiency.</li>
+                </ul>
+            `;
+    
+            analysisSection.innerHTML += analysisDetails;
+            analysisElement.appendChild(analysisSection);
+    
+            updateChart();
+        }
+    
+        function calculateVolume(data) {
+            let totalVolume = 0;
+            for (let i = 1; i < data.length; i++) {
+                const volume = parseFloat(data[i][1]);
+                if (!isNaN(volume)) {
+                    totalVolume += volume;
+                }
+            }
+            return totalVolume;
+        }
+    
+        function identifyPeakMonth(data) {
+            let monthlyVolumes = Array(12).fill(0);
+            for (let i = 1; i < data.length; i++) {
+                const date = new Date(data[i][0]);
+                const volume = parseFloat(data[i][1]);
+                if (!isNaN(volume)) {
+                    monthlyVolumes[date.getMonth()] += volume;
+                }
+            }
+            const peakMonthIndex = monthlyVolumes.indexOf(Math.max(...monthlyVolumes));
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            return monthNames[peakMonthIndex];
+        }
+    
+        function updateChart() {
+            const chartType = document.getElementById('chartType').value;
+            const ctx = document.getElementById('chart').getContext('2d');
+            const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const data = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Import Volume',
+                        data: [1200, 1500, 1100, 1800, 1300, 1700, 1600, 1900, 1500, 1400, 1800, 2000],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Export Volume',
+                        data: [1000, 1300, 900, 1600, 1100, 1500, 1400, 1700, 1300, 1200, 1600, 1800],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+    
+            const config = {
+                type: chartType,
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return `${tooltipItem.dataset.label}: ${tooltipItem.parsed.y}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+    
+            if (window.myChart instanceof Chart) {
+                window.myChart.destroy();
+            }
+            window.myChart = new Chart(ctx, config);
+        }
+    </script>
+</body>
+</html>
