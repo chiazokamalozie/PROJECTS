@@ -9,7 +9,7 @@ import joblib
 # For this example, we retrain quickly (in real app, load from disk)
 @st.cache(allow_output_mutation=True)
 def load_model():
-    df = pd.read_csv('WA_Fn-UseC_-Telco-Customer-Churn.csv')
+    df = pd.read_csv('DATA-SCIENCE/WA_Fn-UseC_-Telco-Customer-Churn.csv')
     df.drop('customerID', axis=1, inplace=True)
     df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
     df.dropna(inplace=True)
