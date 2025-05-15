@@ -9,7 +9,8 @@ import joblib
 # For this example, we retrain quickly (in real app, load from disk)
 @st.cache(allow_output_mutation=True)
 def load_model():
-    df = pd.read_csv('Customer-Churn.csv')
+pd.read_csv('Customer-Churn.csv')
+
     
     # Drop irrelevant or broken data
     df.drop('customerID', axis=1, inplace=True)
