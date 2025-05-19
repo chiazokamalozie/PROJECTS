@@ -93,7 +93,17 @@ with col2:
     st.markdown("### 🏆 Top Feature Importances")
     importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
     importances = importances.sort_values("Importance", ascending=False)
-    fig = px.bar(importances.head(20), x="Importance", y="Feature", orientation="h")
+    # Friendly labels for plot: convert *_Yes to "<Feature> = Yes", gender_Male to "Gender = Male"
+    friendly_names = (
+        importances["Feature"]
+        .str.replace("_Yes$", " = Yes", regex=True)
+        .str.replace("gender_Male", "Gender = Male", regex=False)
+        .str.replace("_", " ")
+        .str.title()
+    )
+    importances_plot = importances.copy()
+    importances_plot["Friendly"] = friendly_names
+    fig = px.bar(importances_plot.head(20), x="Importance", y="Friendly", orientation="h")
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
     st.plotly_chart(fig, use_container_width=True)
 
