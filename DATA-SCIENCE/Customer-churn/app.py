@@ -44,6 +44,9 @@ def get_trained_components():
 
 model, scaler, feature_names = get_trained_components()
 
+# Features originating from Yes/No columns all end with _Yes in one‑hot encoding (except gender_Male handled separately)
+yn_features = [f for f in feature_names if f.endswith("_Yes")]
+
 # ---------- Sidebar input UI ---------- #
 st.sidebar.header("📝 Input Customer Data")
 with st.sidebar.expander("Fill in customer attributes", expanded=True):
@@ -52,13 +55,14 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
     cols = st.columns(num_cols)
     for idx, feature in enumerate(feature_names):
         with cols[idx % num_cols]:
-            # Special handling for gender_Male so that 1 = Male, 2 = Female
+            # Gender mapping 1 Male 2 Female
             if feature == "gender_Male":
-                gender_val = st.selectbox(
-                    "Gender (1 = Male, 2 = Female)", options=[1, 2], index=0
-                )
-                # Map to model expectation: 1 stays 1, 2 becomes 0
-                user_inputs[feature] = 1 if gender_val == 1 else 0
+                g_val = st.selectbox("Gender (1 = Male, 2 = Female)", [1, 2], 0)
+                user_inputs[feature] = 1 if g_val == 1 else 0
+            # Generic Yes/No mapping 1 Yes 2 No
+            elif feature in yn_features:
+                yn_val = st.selectbox(feature.replace("_Yes", "").replace("_", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
+                user_inputs[feature] = 1 if yn_val == 1 else 0
             else:
                 default_val = 0.0
                 if "tenure" in feature.lower():
@@ -66,7 +70,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
                 elif "charges" in feature.lower():
                     default_val = 50.0
                 user_inputs[feature] = st.number_input(
-                    label=feature.replace("_", " ").title(),
+                    feature.replace("_", " ").title(),
                     min_value=0.0,
                     value=float(default_val),
                     step=1.0,
