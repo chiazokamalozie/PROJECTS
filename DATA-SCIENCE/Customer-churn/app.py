@@ -43,7 +43,7 @@ def get_trained_components():
     return train_model(df)
 
 model, scaler, feature_names = get_trained_components()
-yn_features = [f for f in feature_names if f.endswith("_Yes")]
+yn_features = [f for f in feature_names if f.endswith("")]
 
 # ---------- Sidebar Input UI ---------- #
 st.sidebar.header("📝 Input Customer Data")
