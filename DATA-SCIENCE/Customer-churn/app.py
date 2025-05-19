@@ -33,7 +33,7 @@ def train_model(df: pd.DataFrame):
     X, y = df.drop("Churn", axis=1), df["Churn"]
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    model = RandomForestClassifier(n_estimators=400, max_depth=None, random_state=42)
+    model = RandomForestClassifier(n_estimators=400, random_state=42)
     model.fit(X_scaled, y)
     return model, scaler, X.columns
 
@@ -48,22 +48,30 @@ model, scaler, feature_names = get_trained_components()
 st.sidebar.header("📝 Input Customer Data")
 with st.sidebar.expander("Fill in customer attributes", expanded=True):
     user_inputs = {}
-    num_cols = 2  # display inputs in 2 columns
+    num_cols = 2
     cols = st.columns(num_cols)
     for idx, feature in enumerate(feature_names):
         with cols[idx % num_cols]:
-            default_val = 0.0
-            if "tenure" in feature.lower():
-                default_val = 12
-            elif "charges" in feature.lower():
-                default_val = 50.0
-            user_inputs[feature] = st.number_input(
-                label=feature.replace("_", " ").title(),
-                min_value=0.0,
-                value=float(default_val),
-                step=1.0,
-                format="%.2f",
-            )
+            # Special handling for gender_Male so that 1 = Male, 2 = Female
+            if feature == "gender_Male":
+                gender_val = st.selectbox(
+                    "Gender (1 = Male, 2 = Female)", options=[1, 2], index=0
+                )
+                # Map to model expectation: 1 stays 1, 2 becomes 0
+                user_inputs[feature] = 1 if gender_val == 1 else 0
+            else:
+                default_val = 0.0
+                if "tenure" in feature.lower():
+                    default_val = 12
+                elif "charges" in feature.lower():
+                    default_val = 50.0
+                user_inputs[feature] = st.number_input(
+                    label=feature.replace("_", " ").title(),
+                    min_value=0.0,
+                    value=float(default_val),
+                    step=1.0,
+                    format="%.2f",
+                )
 
 input_df = pd.DataFrame([user_inputs])
 X_scaled = scaler.transform(input_df)
@@ -74,17 +82,13 @@ with col1:
     st.markdown("### 🔮 Prediction")
     prediction = model.predict(X_scaled)[0]
     prob = model.predict_proba(X_scaled)[0][1]
-    st.metric("Churn Likelihood", f"{prob * 100:.1f}%", delta=None)
+    st.metric("Churn Likelihood", f"{prob * 100:.1f}%")
     st.success("Customer is likely to stay! 😊" if prediction == 0 else "High churn risk! ⚠️")
 
 with col2:
-    st.markdown("### 🏆 Feature Importances")
-    importances = pd.DataFrame(
-        {
-            "Feature": feature_names,
-            "Importance": model.feature_importances_,
-        }
-    ).sort_values("Importance", ascending=False)
+    st.markdown("### 🏆 Top Feature Importances")
+    importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
+    importances = importances.sort_values("Importance", ascending=False)
     fig = px.bar(importances.head(20), x="Importance", y="Feature", orientation="h")
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
     st.plotly_chart(fig, use_container_width=True)
