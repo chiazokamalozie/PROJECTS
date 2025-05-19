@@ -5,7 +5,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 import plotly.express as px
 from functools import lru_cache
-import shap
 
 st.set_page_config(
     page_title="📊 Telco Churn Predictor",
@@ -43,14 +42,9 @@ def get_trained_components():
     df = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
     return train_model(df)
 
-@st.cache_resource
-def get_explainer(model):
-    return shap.TreeExplainer(model)
-
 model, scaler, feature_names = get_trained_components()
-explainer = get_explainer(model)
 
-# Features originating from Yes/No columns all end with _Yes in one-hot encoding (except gender_Male handled separately)
+# Features originating from Yes/No columns all end with _Yes in one‑hot encoding (except gender_Male handled separately)
 yn_features = [f for f in feature_names if f.endswith("_Yes")]
 
 # ---------- Sidebar input UI ---------- #
@@ -63,12 +57,11 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
         with cols[idx % num_cols]:
             # Gender mapping 1 Male 2 Female
             if feature == "gender_Male":
-                g_val = st.selectbox("Gender (1 = Male, 2 = Female)", [1, 2], index=0)
+                g_val = st.selectbox("Gender (1 = Male, 2 = Female)", [1, 2], 0)
                 user_inputs[feature] = 1 if g_val == 1 else 0
             # Generic Yes/No mapping 1 Yes 2 No
             elif feature in yn_features:
-                label = feature.replace("_Yes", "").replace("_", " ").title()
-                yn_val = st.selectbox(f"{label} (1=Yes, 2=No)", [1, 2], index=1)
+                yn_val = st.selectbox(feature.replace("", "").replace("", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
                 user_inputs[feature] = 1 if yn_val == 1 else 0
             else:
                 default_val = 0.0
@@ -100,6 +93,7 @@ with col2:
     st.markdown("### 🏆 Top Feature Importances")
     importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
     importances = importances.sort_values("Importance", ascending=False)
+    # Friendly labels for plot: remove "_Yes" suffix, keep gender label
     friendly_names = (
         importances["Feature"]
         .str.replace("_Yes$", "", regex=True)
@@ -112,27 +106,6 @@ with col2:
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
     st.plotly_chart(fig, use_container_width=True)
 
-# ---------- SHAP Explanation ---------- #
-st.markdown("### 🔍 Explain Prediction with SHAP")
-
-# Calculate SHAP values for current input
-shap_values = explainer.shap_values(X_scaled)[1]  # index 1 for positive class (Churn=1)
-expected_value = explainer.expected_value[1]
-
-# Create SHAP force plot using matplotlib and render in Streamlit
-import matplotlib.pyplot as plt
-import shap.plots._force as force
-
-fig, ax = plt.subplots(figsize=(12, 3))
-shap.force_plot(
-    expected_value,
-    shap_values[0],
-    input_df.iloc[0],
-    matplotlib=True,
-    show=False,
-    ax=ax
-)
-st.pyplot(fig)
 
 # ---------- Dataset exploration ---------- #
 with st.expander("📂 Peek at training dataset"):
