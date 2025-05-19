@@ -97,7 +97,7 @@ with col2:
     friendly_names = (
         importances["Feature"]
         .str.replace("_Yes$", "", regex=True)
-        .str.replace("gender_Male", "Gender = Male", regex=False)
+        .str.replace("gender_Male", regex=False)
         .str.replace("_", " ")
         .str.title()
     )
