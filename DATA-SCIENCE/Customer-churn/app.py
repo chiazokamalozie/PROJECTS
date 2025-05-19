@@ -52,7 +52,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
     cols = st.columns(2)
     for i, feature in enumerate(feature_names):
         with cols[i % 2]:
-            label = feature.replace("_Yes", "").replace("_", " ").title()
+            label = feature.replace("", "").replace("_", " ").title()
             if feature == "gender_Male":
                 gender = st.radio("Gender", ["Male", "Female"])
                 user_inputs[feature] = 1 if gender == "Male" else 0
