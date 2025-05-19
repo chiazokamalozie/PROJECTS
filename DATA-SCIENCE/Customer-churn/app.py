@@ -43,9 +43,14 @@ def get_trained_components():
     df = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
     return train_model(df)
 
-model, scaler, feature_names = get_trained_components()
+@st.cache_resource
+def get_explainer(model):
+    return shap.TreeExplainer(model)
 
-# Features originating from Yes/No columns all end with _Yes in one‑hot encoding (except gender_Male handled separately)
+model, scaler, feature_names = get_trained_components()
+explainer = get_explainer(model)
+
+# Features originating from Yes/No columns all end with _Yes in one-hot encoding (except gender_Male handled separately)
 yn_features = [f for f in feature_names if f.endswith("_Yes")]
 
 # ---------- Sidebar input UI ---------- #
@@ -58,11 +63,12 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
         with cols[idx % num_cols]:
             # Gender mapping 1 Male 2 Female
             if feature == "gender_Male":
-                g_val = st.selectbox("Gender (1 = Male, 2 = Female)", [1, 2], 0)
+                g_val = st.selectbox("Gender (1 = Male, 2 = Female)", [1, 2], index=0)
                 user_inputs[feature] = 1 if g_val == 1 else 0
             # Generic Yes/No mapping 1 Yes 2 No
             elif feature in yn_features:
-                yn_val = st.selectbox(feature.replace("", "").replace("", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
+                label = feature.replace("_Yes", "").replace("_", " ").title()
+                yn_val = st.selectbox(f"{label} (1=Yes, 2=No)", [1, 2], index=1)
                 user_inputs[feature] = 1 if yn_val == 1 else 0
             else:
                 default_val = 0.0
@@ -91,34 +97,42 @@ with col1:
     st.success("Customer is likely to stay! 😊" if prediction == 0 else "High churn risk! ⚠️")
 
 with col2:
-    st.markdown("### 🏆 Local Feature Impact (SHAP values)")
-    explainer = get_explainer(model)
-    shap_values = explainer.shap_values(X_scaled)[1]  # class 1 = churn
-    
-    shap_df = pd.DataFrame({
-        'Feature': feature_names,
-        'SHAP Value': shap_values[0]
-    })
-    shap_df['Abs SHAP'] = shap_df['SHAP Value'].abs()
-    shap_df = shap_df.sort_values('Abs SHAP', ascending=False).head(20)
-    shap_df['Friendly'] = (
-        shap_df['Feature']
+    st.markdown("### 🏆 Top Feature Importances")
+    importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
+    importances = importances.sort_values("Importance", ascending=False)
+    friendly_names = (
+        importances["Feature"]
         .str.replace("_Yes$", "", regex=True)
         .str.replace("_", " ")
         .str.title()
     )
-    fig = px.bar(
-        shap_df.sort_values('SHAP Value'),
-        x='SHAP Value',
-        y='Friendly',
-        orientation='h',
-        color='SHAP Value',
-        color_continuous_scale='RdBu',
-        title="Local Feature Impact on Prediction"
-    )
-    fig.update_layout(margin=dict(l=0, r=0, t=30, b=0), height=600)
+    importances_plot = importances.copy()
+    importances_plot["Friendly"] = friendly_names
+    fig = px.bar(importances_plot.head(20), x="Importance", y="Friendly", orientation="h")
+    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
     st.plotly_chart(fig, use_container_width=True)
 
+# ---------- SHAP Explanation ---------- #
+st.markdown("### 🔍 Explain Prediction with SHAP")
+
+# Calculate SHAP values for current input
+shap_values = explainer.shap_values(X_scaled)[1]  # index 1 for positive class (Churn=1)
+expected_value = explainer.expected_value[1]
+
+# Create SHAP force plot using matplotlib and render in Streamlit
+import matplotlib.pyplot as plt
+import shap.plots._force as force
+
+fig, ax = plt.subplots(figsize=(12, 3))
+shap.force_plot(
+    expected_value,
+    shap_values[0],
+    input_df.iloc[0],
+    matplotlib=True,
+    show=False,
+    ax=ax
+)
+st.pyplot(fig)
 
 # ---------- Dataset exploration ---------- #
 with st.expander("📂 Peek at training dataset"):
