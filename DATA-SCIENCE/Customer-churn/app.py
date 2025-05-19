@@ -1,62 +1,95 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-import joblib
+from sklearn.preprocessing import StandardScaler
+import plotly.express as px
+from functools import lru_cache
 
-# Load your trained model and scaler (assumes you've saved them)
-# For this example, we retrain quickly (in real app, load from disk)
-@st.cache(allow_output_mutation=True)
-def load_model():
-    df = pd.read_csv('DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv')
-    df.drop('customerID', axis=1, inplace=True)
-    df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
+st.set_page_config(
+    page_title="📊 Telco Churn Predictor",
+    page_icon="📞",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# ---------- Helper functions ---------- #
+@st.cache_data(show_spinner=False)
+def load_dataset(path: str) -> pd.DataFrame:
+    """Load and clean the Telco churn dataset"""
+    df = pd.read_csv(path)
+    df.drop("customerID", axis=1, inplace=True)
+    df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
     df.dropna(inplace=True)
-
-    # Encode target
-    df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
-
-    # Identify categorical columns
-    categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
-    if 'Churn' in categorical_cols:
-        categorical_cols.remove('Churn')  # Exclude target if in list
-
-    # One-hot encode all categorical variables
+    df["Churn"] = df["Churn"].map({"Yes": 1, "No": 0})
+    categorical_cols = df.select_dtypes("object").columns.tolist()
+    if "Churn" in categorical_cols:
+        categorical_cols.remove("Churn")
     df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+    return df
 
-    X = df.drop('Churn', axis=1)
-    y = df['Churn']
+@st.cache_resource(show_spinner=False)
+def train_model(df: pd.DataFrame):
+    X, y = df.drop("Churn", axis=1), df["Churn"]
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    model = RandomForestClassifier(n_estimators=400, max_depth=None, random_state=42)
+    model.fit(X_scaled, y)
+    return model, scaler, X.columns
 
-    # Fit the model
-    model = RandomForestClassifier(random_state=42)
-    model.fit(X, y)
+@lru_cache(maxsize=1)
+def get_trained_components():
+    df = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+    return train_model(df)
 
-    return model, X.columns.tolist()
+model, scaler, feature_names = get_trained_components()
 
+# ---------- Sidebar input UI ---------- #
+st.sidebar.header("📝 Input Customer Data")
+with st.sidebar.expander("Fill in customer attributes", expanded=True):
+    user_inputs = {}
+    num_cols = 2  # display inputs in 2 columns
+    cols = st.columns(num_cols)
+    for idx, feature in enumerate(feature_names):
+        with cols[idx % num_cols]:
+            default_val = 0.0
+            if "tenure" in feature.lower():
+                default_val = 12
+            elif "charges" in feature.lower():
+                default_val = 50.0
+            user_inputs[feature] = st.number_input(
+                label=feature.replace("_", " ").title(),
+                min_value=0.0,
+                value=float(default_val),
+                step=1.0,
+                format="%.2f",
+            )
 
-model, feature_names = load_model()
+input_df = pd.DataFrame([user_inputs])
+X_scaled = scaler.transform(input_df)
 
-st.title("Telco Customer Churn Prediction Dashboard")
+# ---------- Prediction output ---------- #
+col1, col2 = st.columns([1, 2])
+with col1:
+    st.markdown("### 🔮 Prediction")
+    prediction = model.predict(X_scaled)[0]
+    prob = model.predict_proba(X_scaled)[0][1]
+    st.metric("Churn Likelihood", f"{prob * 100:.1f}%", delta=None)
+    st.success("Customer is likely to stay! 😊" if prediction == 0 else "High churn risk! ⚠️")
 
-st.sidebar.header("Input Customer Data")
-inputs = {}
-for feature in feature_names:
-    inputs[feature] = st.sidebar.text_input(feature, "0")
+with col2:
+    st.markdown("### 🏆 Feature Importances")
+    importances = pd.DataFrame(
+        {
+            "Feature": feature_names,
+            "Importance": model.feature_importances_,
+        }
+    ).sort_values("Importance", ascending=False)
+    fig = px.bar(importances.head(20), x="Importance", y="Feature", orientation="h")
+    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
+    st.plotly_chart(fig, use_container_width=True)
 
-input_df = pd.DataFrame([inputs])
-input_df = input_df.astype(float)  # convert inputs to float for model
-
-prediction = model.predict(input_df)[0]
-probability = model.predict_proba(input_df)[0][1]
-
-st.subheader("Prediction")
-st.write("Churn" if prediction==1 else "No Churn")
-st.write(f"Probability of Churn: {probability:.2f}")
-
-# Optional: Show feature importances
-st.subheader("Feature Importances")
-importances = model.feature_importances_
-importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances})
-importance_df = importance_df.sort_values(by='Importance', ascending=False)
-st.bar_chart(importance_df.set_index('Feature'))
+# ---------- Dataset exploration ---------- #
+with st.expander("📂 Peek at training dataset"):
+    df_preview = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+    st.dataframe(df_preview.head(), use_container_width=True)
