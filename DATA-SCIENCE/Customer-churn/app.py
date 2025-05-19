@@ -55,7 +55,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
             label = feature.replace("", "").replace("_", " ").title()
             if feature == "gender":
                 gender = st.radio("Gender", ["Male", "Female"])
-                user_inputs[feature] = 1 if gender == "Male" else 0
+                user_inputs[feature] = 1 if gender == "" else 0
             elif feature in yn_features:
                 response = st.radio(f"{label}?", ["Yes", "No"], index=1)
                 user_inputs[feature] = 1 if response == "Yes" else 0
