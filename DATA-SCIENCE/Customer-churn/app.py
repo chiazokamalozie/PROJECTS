@@ -61,7 +61,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
                 user_inputs[feature] = 1 if g_val == 1 else 0
             # Generic Yes/No mapping 1 Yes 2 No
             elif feature in yn_features:
-                yn_val = st.selectbox(feature.replace("_Yes", "").replace("_", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
+                yn_val = st.selectbox(feature.replace("", "").replace("", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
                 user_inputs[feature] = 1 if yn_val == 1 else 0
             else:
                 default_val = 0.0
