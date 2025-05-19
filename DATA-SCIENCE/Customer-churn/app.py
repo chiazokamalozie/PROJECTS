@@ -44,10 +44,10 @@ def get_trained_components():
 
 model, scaler, feature_names = get_trained_components()
 
-# Features originating from Yes/No columns all end with _Yes in one-hot encoding (except gender_Male handled separately)
+# Features originating from Yes/No columns all end with _Yes in one‑hot encoding (except gender_Male handled separately)
 yn_features = [f for f in feature_names if f.endswith("_Yes")]
 
-# ---------- Sidebar input UI ----------
+# ---------- Sidebar input UI ---------- #
 st.sidebar.header("📝 Input Customer Data")
 with st.sidebar.expander("Fill in customer attributes", expanded=True):
     user_inputs = {}
@@ -61,11 +61,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
                 user_inputs[feature] = 1 if g_val == 1 else 0
             # Generic Yes/No mapping 1 Yes 2 No
             elif feature in yn_features:
-                yn_val = st.selectbox(
-                    feature.replace("_Yes", "").replace("_", " ").title() + " (1=Yes, 2=No)",
-                    [1, 2],
-                    1,
-                )
+                yn_val = st.selectbox(feature.replace("_Yes", "").replace("_", " ").title() + " (1=Yes, 2=No)", [1, 2], 1)
                 user_inputs[feature] = 1 if yn_val == 1 else 0
             else:
                 default_val = 0.0
@@ -84,7 +80,7 @@ with st.sidebar.expander("Fill in customer attributes", expanded=True):
 input_df = pd.DataFrame([user_inputs])
 X_scaled = scaler.transform(input_df)
 
-# ---------- Prediction output ----------
+# ---------- Prediction output ---------- #
 col1, col2 = st.columns([1, 2])
 with col1:
     st.markdown("### 🔮 Prediction")
@@ -97,7 +93,7 @@ with col2:
     st.markdown("### 🏆 Top Feature Importances")
     importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
     importances = importances.sort_values("Importance", ascending=False)
-    # Friendly labels for plot
+    # Friendly labels for plot: convert *_Yes to "<Feature> = Yes", gender_Male to "Gender = Male"
     friendly_names = (
         importances["Feature"]
         .str.replace("_Yes$", " = Yes", regex=True)
@@ -107,44 +103,11 @@ with col2:
     )
     importances_plot = importances.copy()
     importances_plot["Friendly"] = friendly_names
-
-    fig = px.bar(
-        importances_plot.head(20),
-        x="Importance",
-        y="Friendly",
-        orientation="h",
-        labels={"Friendly": "Feature"},
-    )
-    fig.update_yaxes(autorange="reversed")  # Most important on top
+    fig = px.bar(importances_plot.head(20), x="Importance", y="Friendly", orientation="h")
     fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
     st.plotly_chart(fig, use_container_width=True)
 
-# ---------- Live current customer attribute chart ----------
-def friendly_label(feat):
-    if feat == "gender_Male":
-        return "Gender = Male"
-    elif feat.endswith("_Yes"):
-        return feat.replace("_Yes", " = Yes").replace("_", " ").title()
-    else:
-        return feat.title()
-
-live_feats = input_df.iloc[0].loc[[f for f in feature_names if f.endswith("_Yes") or f == "gender_Male"]]
-live_feats.index = live_feats.index.map(friendly_label)
-
-st.subheader("Current Customer Attributes")
-fig2 = px.bar(
-    live_feats,
-    x=live_feats.values,
-    y=live_feats.index,
-    orientation="h",
-    labels={"x": "Presence (1=Yes/Male, 0=No/Female)", "y": "Attribute"},
-    range_x=[-0.1, 1.1],
-)
-fig2.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=400)
-fig2.update_yaxes(autorange="reversed")
-st.plotly_chart(fig2, use_container_width=True)
-
-# ---------- Dataset preview (optional) ----------
+# ---------- Dataset exploration ---------- #
 with st.expander("📂 Peek at training dataset"):
     df_preview = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
     st.dataframe(df_preview.head(), use_container_width=True)
