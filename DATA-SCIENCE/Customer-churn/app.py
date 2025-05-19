@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 import plotly.express as px
 from functools import lru_cache
+import shap
 
 st.set_page_config(
     page_title="📊 Telco Churn Predictor",
@@ -90,20 +91,32 @@ with col1:
     st.success("Customer is likely to stay! 😊" if prediction == 0 else "High churn risk! ⚠️")
 
 with col2:
-    st.markdown("### 🏆 Top Feature Importances")
-    importances = pd.DataFrame({"Feature": feature_names, "Importance": model.feature_importances_})
-    importances = importances.sort_values("Importance", ascending=False)
-    # Friendly labels for plot: remove "_Yes" suffix, keep gender label
-    friendly_names = (
-        importances["Feature"]
+    st.markdown("### 🏆 Local Feature Impact (SHAP values)")
+    explainer = get_explainer(model)
+    shap_values = explainer.shap_values(X_scaled)[1]  # class 1 = churn
+    
+    shap_df = pd.DataFrame({
+        'Feature': feature_names,
+        'SHAP Value': shap_values[0]
+    })
+    shap_df['Abs SHAP'] = shap_df['SHAP Value'].abs()
+    shap_df = shap_df.sort_values('Abs SHAP', ascending=False).head(20)
+    shap_df['Friendly'] = (
+        shap_df['Feature']
         .str.replace("_Yes$", "", regex=True)
         .str.replace("_", " ")
         .str.title()
     )
-    importances_plot = importances.copy()
-    importances_plot["Friendly"] = friendly_names
-    fig = px.bar(importances_plot.head(20), x="Importance", y="Friendly", orientation="h")
-    fig.update_layout(margin=dict(l=0, r=0, t=10, b=0), height=500)
+    fig = px.bar(
+        shap_df.sort_values('SHAP Value'),
+        x='SHAP Value',
+        y='Friendly',
+        orientation='h',
+        color='SHAP Value',
+        color_continuous_scale='RdBu',
+        title="Local Feature Impact on Prediction"
+    )
+    fig.update_layout(margin=dict(l=0, r=0, t=30, b=0), height=600)
     st.plotly_chart(fig, use_container_width=True)
 
 
