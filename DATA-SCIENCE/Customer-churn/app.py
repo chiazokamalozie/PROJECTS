@@ -7,8 +7,8 @@ import plotly.express as px
 from functools import lru_cache
 
 st.set_page_config(
-    page_title="📊 Telco Churn Predictor",
-    page_icon="📞",
+    page_title="Telco Churn Predictor",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -75,25 +75,25 @@ input_df = pd.DataFrame([user_inputs])
 X_scaled = scaler.transform(input_df)
 
 # ---------- Main Area: Prediction + Visuals ---------- #
-st.title("📞 Telco Customer Churn Predictor")
+st.title("Telco Customer Churn Predictor")
 st.markdown("Predict the likelihood of a customer leaving their telecom service based on various attributes.")
 
 col1, col2 = st.columns([1, 2])
 with col1:
-    st.subheader("🔮 Prediction")
+    st.subheader("Prediction")
     prediction = model.predict(X_scaled)[0]
     probability = model.predict_proba(X_scaled)[0][1]
     st.metric("Churn Likelihood", f"{probability * 100:.1f}%")
     if prediction == 0:
-        st.success("✅ Customer likely to stay.")
+        st.success("Customer likely to stay.")
     else:
-        st.error("⚠️ High churn risk detected!")
+        st.error("High churn risk detected!")
 
-    with st.expander("📋 Customer Input Summary"):
+    with st.expander("Customer Input Summary"):
         st.dataframe(input_df.T.rename(columns={0: "Value"}), use_container_width=True)
 
 with col2:
-    st.subheader("📊 Top Feature Importances")
+    st.subheader("Top Feature Importances")
     importances = pd.DataFrame({
         "Feature": feature_names,
         "Importance": model.feature_importances_
@@ -112,7 +112,7 @@ with col2:
     st.plotly_chart(fig, use_container_width=True)
 
 # ---------- Dataset Explorer ---------- #
-with st.expander("📂 Preview Training Dataset"):
+with st.expander("Preview Training Dataset"):
     df_preview = load_dataset("DATA-SCIENCE/Customer-churn/WA_Fn-UseC_-Telco-Customer-Churn.csv")
     st.dataframe(df_preview.head(100), use_container_width=True)
 
