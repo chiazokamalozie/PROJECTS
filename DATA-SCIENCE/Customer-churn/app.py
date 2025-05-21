@@ -118,4 +118,4 @@ with st.expander("Preview Training Dataset"):
 
 # ---------- Footer ---------- #
 st.markdown("---")
-st.caption("Built with 💙 using Streamlit, Scikit-Learn, and Plotly | Contact: your_email@example.com")
+st.caption("Built with 💙 using Streamlit, Scikit-Learn, and Plotly | Contact: chiazokamialozie@gmail.com")
