@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Document Title, Description, and Author -->
+  <title>Alochidltd</title>
+  <meta name="description" content="Alochidltd A helping Hand.">
+  <meta name="author" content="BootstrapBrain">
+
+  <!-- Favicon and Touch Icons -->
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+
+  <!-- Google Fonts Files -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/alochid.css') }}">
+  
+  <!-- back to top button-->
+  <a id="button"></a>
+
+  <!-- BSB Head -->
+  
+  <style>
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      text-align: center; /* Centering text within grid */
+    }
+
+    .image-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .image-row img {
+      flex: 1;
+      width: calc(33.333% - 10px); /* Adjust width to fit 3 images in a row with a gap */
+      height: auto;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#bsb-tpl-navbar" data-bs-smooth-scroll="true" tabindex="0">
+  <!-- Header -->
+  <header id="header" class="sticky-top bsb-tpl-header-sticky bsb-tpl-header-sticky-animationX">
+    <!-- Navbar 1 - Bootstrap Brain Component -->
+    <nav id="scrollspyNav" class="navbar navbar-expand-lg bsb-tpl-bg-blue bsb-navbar bsb-navbar-hover bsb-navbar-caret bsb-tpl-navbar-sticky" data-bsb-sticky-target="#header">
+      <div class="container">
+        <a class="navbar-brand" href="index">
+          <img src="alochid-logo.svg" class="bsb-tpl-logo" alt="">
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul id="bsb-tpl-navbar" class="navbar-nav justify-content-end flex-grow-1">
+              <li class="nav-item">
+                <a class="nav-link" href="index" aria-current="page">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="programs">Get involved</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="team">Team</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="donate">Donate</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="ourblog">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index#scrollspyContact">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- End of Navbar -->
+  </header>
+  
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <section class="grid">
+        <div class="image-row">
+          <img class="smaller-image" src="blog-image-4.jpg" alt="About Me">
+          <img class="smaller-image" src="blog-image-1.jpg" alt="About Me">
+          <img class="smaller-image" src="blog-image-2.jpg" alt="About Me">
+        </div>
+        <div class="column-xs-12 column-md-8">
+          <div class="intro">
+            <div class="container text-center my-5">
+              <h2 class="display-3 fw-bolder mb-4">About <mark class="bsb-tpl-highlight bsb-tpl-highlight-yellow"><span class="bsb-tpl-font-hw display-1 text-accent fw-normal">Us</span></mark></h2>
+            </div>
+            <p>At Alochid Ltd, we are dedicated to transforming healthcare through innovation, compassion, and excellence. Our mission is to provide exceptional medical services that enhance the quality of life for individuals and communities.</p>
+            <p>Alochid Ltd is a leading healthcare organization committed to delivering comprehensive and patient-centered care. Our team of highly skilled healthcare professionals, including doctors, nurses, and support staff, work collaboratively to ensure that each patient receives personalized and effective treatment.</p>
+          </div>
+        </div>
+        <div class="column-xs-12 column-md-8">
+          <blockquote>
+            <h3>We envision a world where healthcare is accessible to all, where prevention is prioritized, and where every individual has the opportunity to achieve optimal health. Alochid Ltd aims to be at the forefront of healthcare innovation, setting the standard for quality and excellence.</h3>
+          </blockquote>
+        </div>
+        <div class="column-xs-12 column-md-4">
+          <!-- Additional content can be added here -->
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
+  <!--end of main content-->
+      
+      <!--footer-->
+       
+  </footer>
+
+  <!-- Javascript Files: Vendors -->
+  <script src="https://unpkg.com/jquery@3.6.1/dist/jquery.min.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/isotope-packery@2.0.1/packery-mode.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5.0.0/imagesloaded.pkgd.min.js"></script>
+  <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Javascript Files: Controllers -->
+  <script src="project-2.js"></script>
+  <script src="alochid.js"></script>
+  <script src="https://www.paypal.com/sdk/js?components=card-fields&client-id=<?php echo PAYPAL_SANDBOX?PAYPAL_SANDBOX_CLIENT_ID:PAYPAL_PROD_CLIENT_ID; ?>"></script>
+
+  <!-- BSB Body End -->
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Document Title, Description, and Author -->
+  <title>Alochidltd</title>
+  <meta name="description" content="Alochidltd A helping Hand.">
+  <meta name="author" content="BootstrapBrain">
+
+  <!-- Favicon and Touch Icons -->
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+
+  <!-- Google Fonts Files -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/alochid.css') }}">
+
+  <!-- back to top button-->
+  <a id="button"></a>
+
+  <!-- BSB Head -->
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#bsb-tpl-navbar" data-bs-smooth-scroll="true" tabindex="0">
+  <!-- Header -->
+  <header id="header" class="sticky-top bsb-tpl-header-sticky bsb-tpl-header-sticky-animationX">
+
+    <!-- Navbar 1 - Bootstrap Brain Component -->
+    <nav id="scrollspyNav" class="navbar navbar-expand-lg bsb-tpl-bg-blue bsb-navbar bsb-navbar-hover bsb-navbar-caret bsb-tpl-navbar-sticky" data-bsb-sticky-target="#header">
+      <div class="container">
+        <a class="navbar-brand" href="index">
+          <img src="alochid-logo.svg" class="bsb-tpl-logo" alt="">
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul id="bsb-tpl-navbar" class="navbar-nav justify-content-end flex-grow-1">
+              <li class="nav-item">
+                <a class="nav-link" href="index" aria-current="page">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="programs">Get involved</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Team">Team</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="donate">Donate</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="ourblog">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index#scrollspyContact">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+  <!-- End of navbar -->
+
+    <!-- Main content -->
+
+    <style>
+      /* Scoped styles for Our Teams page */
+      .our-teams-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      .our-teams-title {
+        text-align: center;
+        font-size: 2.5em;
+        color: #333;
+        margin-bottom: 30px;
+      }
+
+      .team-member {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      .team-member-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+      }
+
+      .team-member-info {
+        max-width: 900px;
+      }
+
+      .team-member-info h2 {
+        font-size: 1.5em;
+        color: #0073e6;
+        margin: 0 0 10px;
+      }
+
+      .team-member-info .team-member-position {
+        font-size: 1.2em;
+        color: #666;
+        margin: 0 0 10px;
+      }
+
+      .team-member-info p {
+        margin: 0 0 10px;
+        font-size: 1em;
+        color: #555;
+      }
+    </style>
+
+    <div class="our-teams-container">
+ <div class="container text-center my-5">
+              <h2 class="display-3 fw-bolder mb-4">Our <mark class="bsb-tpl-highlight bsb-tpl-highlight-yellow"><span class="bsb-tpl-font-hw display-1 text-accent fw-normal">Team</span></mark></h2>
+      <div class="team-member">
+        <img src="images/team-member1.jpg" alt="Dr. Jane Doe" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>Dr. Jane Doe</h2>
+          <p class="team-member-position">Chief Medical Officer</p>
+          <p>Dr. Jane Doe is an experienced healthcare professional with over 20 years in the medical field. She specializes in internal medicine and patient care. Dr. Doe holds a medical degree from Harvard Medical School and is committed to improving patient outcomes through innovative treatment methods and compassionate care.</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <img src="images/team-member2.jpg" alt="John Smith" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>John Smith</h2>
+          <p class="team-member-position">Head of Nursing</p>
+          <p>John Smith has been leading our nursing team for the past 10 years. He has a Master’s degree in Nursing from the University of Pennsylvania and is dedicated to ensuring the highest standards of nursing care. John’s leadership and commitment to excellence have been instrumental in maintaining our outstanding patient satisfaction rates.</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <img src="images/team-member3.jpg" alt="Dr. Alice Brown" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>Dr. Alice Brown</h2>
+          <p class="team-member-position">Pediatric Specialist</p>
+          <p>Dr. Alice Brown is a renowned pediatric specialist with over 15 years of experience. She earned her medical degree from Stanford University and completed her residency in pediatric medicine at the Children's Hospital of Philadelphia. Dr. Brown is passionate about child health and well-being and is an advocate for preventive healthcare.</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <img src="images/team-member4.jpg" alt="Michael Green" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>Michael Green</h2>
+          <p class="team-member-position">Chief Financial Officer</p>
+          <p>Michael Green oversees the financial operations of Alochid Ltd. With a background in healthcare finance, Michael holds an MBA from the Wharton School of Business. His expertise in financial management ensures the organization's fiscal health, allowing us to continue providing top-quality care to our patients.</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <img src="images/team-member5.jpg" alt="Dr. Emily White" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>Dr. Emily White</h2>
+          <p class="team-member-position">Cardiologist</p>
+          <p>Dr. Emily White is a leading cardiologist with over 18 years of experience in treating cardiovascular diseases. She graduated from Johns Hopkins University School of Medicine and completed her fellowship at the Mayo Clinic. Dr. White is dedicated to advancing heart health through research and patient-centered care.</p>
+        </div>
+      </div>
+
+      <div class="team-member">
+        <img src="images/team-member6.jpg" alt="Sarah Johnson" class="team-member-photo">
+        <div class="team-member-info">
+          <h2>Sarah Johnson</h2>
+          <p class="team-member-position">Chief Operating Officer</p>
+          <p>Sarah Johnson is responsible for the day-to-day operations of Alochid Ltd. She has a Bachelor’s degree in Healthcare Administration from the University of California, Los Angeles, and over 12 years of experience in healthcare management. Sarah's strategic vision and operational expertise ensure smooth and efficient healthcare delivery.</p>
+        </div>
+      </div>
+
+    </div>
+  </header>
+</body>
+
+</html>
+
+      <!--end of main content-->
+      
+      <!--footer-->
+       
+  </footer>
+
+  <!-- Javascript Files: Vendors -->
+  <script src="https://unpkg.com/jquery@3.6.1/dist/jquery.min.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/isotope-packery@2.0.1/packery-mode.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5.0.0/imagesloaded.pkgd.min.js"></script>
+  <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Javascript Files: Controllers -->
+  <script src="project-2.js"></script>
+  <script src="controller/alochid.js"></script>
+  <script src="https://www.paypal.com/sdk/js?components=card-fields&client-id=<?php echo PAYPAL_SANDBOX?PAYPAL_SANDBOX_CLIENT_ID:PAYPAL_PROD_CLIENT_ID; ?>"></script>
+
+  <!-- BSB Body End -->
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Document Title, Description, and Author -->
+  <title>Alochidltd</title>
+  <meta name="description" content="Alochidltd A helping Hand.">
+  <meta name="author" content="BootstrapBrain">
+
+  <!-- Favicon and Touch Icons -->
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+
+  <!-- Google Fonts Files -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/alochid.css') }}">
+
+  <!-- back to top button-->
+  <a id="button"></a>
+
+  <!-- BSB Head -->
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#bsb-tpl-navbar" data-bs-smooth-scroll="true" tabindex="0">
+  <!-- Header -->
+  <header id="header" class="sticky-top bsb-tpl-header-sticky bsb-tpl-header-sticky-animationX">
+
+    <!-- Navbar 1 - Bootstrap Brain Component -->
+    <nav id="scrollspyNav" class="navbar navbar-expand-lg bsb-tpl-bg-blue bsb-navbar bsb-navbar-hover bsb-navbar-caret bsb-tpl-navbar-sticky" data-bsb-sticky-target="#header">
+      <div class="container">
+        <a class="navbar-brand" href="index">
+          <img src="alochid-logo.svg" class="bsb-tpl-logo" alt="">
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul id="bsb-tpl-navbar" class="navbar-nav justify-content-end flex-grow-1">
+              <li class="nav-item">
+                <a class="nav-link" href="index" aria-current="page">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="programs">Get involved</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Team">Team</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="donate">Donate</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="ourblog">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="index#scrollspyContact">Contact</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+  </header>
+  <!-- End of navbar -->
+
+  <!-- Main content -->
+  <main>
+    <header>
+      <div class="container text-center my-5">
+        <h2 class="display-3 fw-bolder mb-4">OUR <mark class="bsb-tpl-highlight bsb-tpl-highlight-yellow"><span class="bsb-tpl-font-hw display-1 text-accent fw-normal">Services</span></mark></h2>
+      </div>
+      <p class="text-center">Welcome to Alochid Ltd, where your health is our priority.</p>
+    </header>
+    <div class="container">
+      <div class="service">
+        <h2>Home Health Care</h2>
+        <p>Our Home Health Care services provide personalized, in-home medical care to help you recover and maintain your independence. From skilled nursing to physical therapy, our compassionate professionals deliver the care you need in the comfort of your home.</p>
+        <p>Our services include:</p>
+        <ul>
+          <li><strong>Skilled Nursing Care:</strong> Our registered nurses provide a range of medical services, including wound care, medication management, and chronic disease management.</li>
+          <li><strong>Physical Therapy:</strong> Our licensed physical therapists work with you to improve mobility, strength, and balance, aiding in your recovery from surgery, injury, or illness.</li>
+          <li><strong>Occupational Therapy:</strong> We help you regain the skills needed for daily living and working, promoting independence and enhancing your quality of life.</li>
+          <li><strong>Speech Therapy:</strong> Our speech-language pathologists assist with communication and swallowing disorders, ensuring you regain essential functions.</li>
+          <li><strong>Personal Care Assistance:</strong> Our trained caregivers assist with daily activities such as bathing, dressing, and meal preparation, ensuring your comfort and well-being.</li>
+          <li><strong>Medical Social Services:</strong> Our social workers provide support with community resources, counseling, and long-term care planning, helping you navigate the complexities of healthcare.</li>
+        </ul>
+        <p>We understand the importance of receiving care in a familiar environment, and our team is dedicated to providing the highest quality care with compassion and respect. Whether you need short-term support after a hospital stay or ongoing assistance for a chronic condition, Alochid Ltd is here to help you achieve the best possible outcomes in the comfort of your own home.</p>
+      </div>
+      <div class="service">
+        <h2>Rehabilitation Services</h2>
+        <p>We offer comprehensive Rehabilitation Services to help you regain strength and mobility. Our team of experts designs individualized therapy programs tailored to your specific needs, ensuring a safe and effective recovery process.</p>
+        <p>Our Rehabilitation Services include:</p>
+        <ul>
+          <li><strong>Physical Therapy:</strong> Our physical therapists work with you to restore function, improve mobility, and relieve pain through targeted exercises and treatments. Whether recovering from surgery, injury, or managing a chronic condition, our team is dedicated to helping you achieve your goals.</li>
+          <li><strong>Occupational Therapy:</strong> Our occupational therapists focus on helping you regain the skills necessary for daily living and work activities. We create customized programs to enhance your ability to perform tasks at home, work, and in the community.</li>
+          <li><strong>Speech Therapy:</strong> Our speech-language pathologists provide specialized care for individuals with communication disorders, swallowing difficulties, and cognitive impairments. We utilize evidence-based techniques to improve speech, language, and cognitive functions.</li>
+          <li><strong>Orthopedic Rehabilitation:</strong> Tailored for those recovering from orthopedic surgeries or injuries, our orthopedic rehabilitation program aims to restore strength, flexibility, and function through targeted therapies and exercises.</li>
+          <li><strong>Neurological Rehabilitation:</strong> Our neurological rehabilitation services are designed for individuals recovering from neurological conditions such as stroke, traumatic brain injury, or spinal cord injury. We focus on improving motor skills, coordination, and overall functional abilities.</li>
+          <li><strong>Cardiac Rehabilitation:</strong> Our cardiac rehabilitation program supports individuals recovering from heart surgery, heart attack, or managing chronic heart conditions. We provide supervised exercise, education, and lifestyle modification to improve cardiovascular health.</li>
+        </ul>
+        <p>At Alochid Ltd, we are committed to providing personalized, patient-centered care. Our goal is to help you achieve the highest level of independence and quality of life through our comprehensive rehabilitation services.</p>
+      </div>
+      <div class="service">
+        <h2>Assisted Living Services</h2>
+        <p>Our Assisted Living Services provide a supportive environment where you can enjoy independence while receiving the care you need. Our dedicated team ensures your comfort, safety, and well-being.</p>
+        <p>Our Assisted Living Services include:</p>
+        <ul>
+          <li><strong>Personalized Care Plans:</strong> We create individualized care plans tailored to your specific needs and preferences. Our team conducts thorough assessments to ensure you receive the appropriate level of care and support.</li>
+          <li><strong>24/7 Support:</strong> Our caregivers are available around the clock to provide assistance with daily activities such as bathing, dressing, medication management, and mobility support. Your safety and comfort are our top priorities.</li>
+          <li><strong>Engaging Activities:</strong> We offer a variety of social, recreational, and wellness activities to promote an active and fulfilling lifestyle. From fitness classes to cultural events, there's always something to enjoy and look forward to.</li>
+          <li><strong>Nutritious Meals:</strong> Our dining services provide delicious and nutritious meals prepared by experienced chefs. We accommodate dietary preferences and special needs to ensure you enjoy a balanced and satisfying diet.</li>
+          <li><strong>Comfortable Living Spaces:</strong> Our assisted living communities feature comfortable and well-appointed living spaces, including private or shared apartments. We prioritize creating a warm and inviting atmosphere where you feel at home.</li>
+          <li><strong>Medical Services:</strong> We coordinate with healthcare providers to ensure you have access to medical services, including regular check-ups, medication management, and specialized care as needed.</li>
+        </ul>
+        <p>At Alochid Ltd, we are dedicated to providing compassionate and personalized care in a supportive environment. Our Assisted Living Services are designed to enhance your quality of life, promote independence, and ensure your well-being. Whether you need assistance with daily activities or simply want to enjoy a vibrant community, we are here to support you every step of the way.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+  </footer>
+
+  <!-- Javascript Files: Vendors -->
+  <script src="https://unpkg.com/jquery@3.6.1/dist/jquery.min.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/isotope-packery@2.0.1/packery-mode.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5.0.0/imagesloaded.pkgd.min.js"></script>
+  <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Javascript Files: Controllers -->
+  <script src="project-2.js"></script>
+  <script src="alochid.js"></script>
+  <script src="https://www.paypal.com/sdk/js?components=card-fields&client-id=<?php echo PAYPAL_SANDBOX?PAYPAL_SANDBOX_CLIENT_ID:PAYPAL_PROD_CLIENT_ID; ?>"></script>
+
+  <!-- BSB Body End -->
+</body>
+
+</html>
+
+
+
