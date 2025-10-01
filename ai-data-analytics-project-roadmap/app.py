@@ -10,8 +10,8 @@ st.title("📦 Customs Cargo Risk Analytics – Demo")
 
 @st.cache_data
 def load_data():
-    trend = pd.read_csv("customs_duties_trend_selected_countries.csv")
-    shipments = pd.read_csv("synthetic_customs_shipments.csv")
+    trend = pd.read_csv("ai-data-analytics-project-roadmap/customs_duties_trend_selected_countries.csv")
+    shipments = pd.read_csv("ai-data-analytics-project-roadmap/synthetic_customs_shipments.csv")
     return trend, shipments
 
 trend, shipments = load_data()
